@@ -1,0 +1,155 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Rittal PDU api
+host: 0.0.0.0:10010
+basePath: /
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /sockets:
+    x-swagger-router-controller: rittal
+    get:
+      description: Lists all available Sockets (might take some time)
+      operationId: getAvailableSockets
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SocketList"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /sockets/{socketId}:
+    x-swagger-router-controller: rittal
+    parameters:
+      - name: socketId
+        in: path
+        description: ID of the socket
+        required: true
+        type: number
+        minimum: 1
+        maximum: 8
+    get:
+      description: get the socket state
+      operationId: getSocket
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Socket"
+        "404":
+          description: Socket unavailable
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: set one socket
+      operationId: setSocket
+      parameters:
+        - name: socket
+          description: the socket object to set
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Socket"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Socket"
+        "404":
+          description: Socket unavailable
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /sockets/{socketId}/plugs/{plugId}:
+    x-swagger-router-controller: rittal
+    post:
+      description: set one specific Plug (gets one Socket and updates it)
+      operationId: setPlug
+      parameters:
+        - name: socketId
+          in: path
+          description: ID of the socket
+          required: true
+          type: number
+          minimum: 1
+          maximum: 8
+        - name: plugId
+          in: path
+          description: ID of the plug
+          required: true
+          type: number
+          minimum: 1
+          maximum: 6
+        - name: state
+          description: the state to be set
+          in: body
+          required: true
+          schema:
+            required:
+              - state
+            properties:
+              state:
+                type: boolean
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Socket"
+        "404":
+          description: Socket unavailable
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /docs:
+    x-swagger-pipe: swagger_raw
+definitions:
+  Plug:
+    required:
+      - id
+      - state
+    properties:
+      id:
+        type: number
+        minimum: 1
+        maximum: 6
+      state:
+        type: boolean
+  Socket:
+    required:
+      - id
+    properties:
+      id:
+        type: number
+        minimum: 1
+        maximum: 8
+      name:
+        type: string
+        maxLength: 8
+      plugs:
+        type: array
+        minItems: 0
+        maxItems: 6
+        items:
+          $ref: "#/definitions/Plug"
+  SocketList:
+    required:
+      - sockets
+    properties:
+      sockets:
+        type: array
+        minItems: 0
+        maxItems: 8
+        items:
+          $ref: "#/definitions/Socket"
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
