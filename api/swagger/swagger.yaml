@@ -106,8 +106,6 @@ paths:
           description: Socket unavailable
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /docs:
-    x-swagger-pipe: swagger_raw
 definitions:
   Plug:
     required:
