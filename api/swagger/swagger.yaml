@@ -11,6 +11,25 @@ consumes:
   - application/json
 produces:
   - application/json
+parameters:
+  socketId:
+    name: socketId
+    in: path
+    description: ID of the socket
+    required: true
+    type: number
+    format: integer
+    minimum: 1
+    maximum: 8
+  plugId:
+    name: plugId
+    in: path
+    description: ID of the plug
+    required: true
+    type: number
+    format: integer
+    minimum: 1
+    maximum: 6
 paths:
   /sockets:
     x-swagger-router-controller: rittal
@@ -29,13 +48,7 @@ paths:
   /sockets/{socketId}:
     x-swagger-router-controller: rittal
     parameters:
-      - name: socketId
-        in: path
-        description: ID of the socket
-        required: true
-        type: number
-        minimum: 1
-        maximum: 8
+      - $ref: '#/parameters/socketId'
     get:
       description: get the socket state
       operationId: getSocket
@@ -69,24 +82,13 @@ paths:
             $ref: "#/definitions/ErrorResponse"
   /sockets/{socketId}/plugs/{plugId}:
     x-swagger-router-controller: rittal
+    parameters:
+      - $ref: '#/parameters/socketId'
+      - $ref: '#/parameters/plugId'
     post:
       description: set one specific Plug (gets one Socket and updates it)
       operationId: setPlug
       parameters:
-        - name: socketId
-          in: path
-          description: ID of the socket
-          required: true
-          type: number
-          minimum: 1
-          maximum: 8
-        - name: plugId
-          in: path
-          description: ID of the plug
-          required: true
-          type: number
-          minimum: 1
-          maximum: 6
         - name: state
           description: the state to be set
           in: body
@@ -114,16 +116,16 @@ definitions:
     properties:
       id:
         type: number
+        format: integer
         minimum: 1
         maximum: 6
       state:
         type: boolean
   Socket:
-    required:
-      - id
     properties:
       id:
         type: number
+        format: integer
         minimum: 1
         maximum: 8
       name:
