@@ -1,5 +1,7 @@
 # Simple Rittal PDU api
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/morbidick/rittal_pdu-api.svg)](https://greenkeeper.io/)
+
 Implemented with Swagger and Express
 
 ```
