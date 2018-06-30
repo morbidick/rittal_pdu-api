@@ -9,13 +9,13 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.12.3",
-    "swagger-express-mw": "^0.1.0",
+    "swagger-express-mw": "^0.7.0",
     "rittal_pdu": "~0.1.8",
     "swagger-tools": "~0.10.1"
   },
   "devDependencies": {
-    "should": "^7.1.0",
-    "supertest": "^1.0.0"
+    "should": "^13.2.1",
+    "supertest": "^3.1.0"
   },
   "scripts": {
     "start": "node app.js",
